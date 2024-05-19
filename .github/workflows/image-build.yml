@@ -58,7 +58,7 @@ jobs:
           context: .
           platforms: linux/amd64
           tags: |
-            latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.versions.outputs.HOMEASSISTANT_VERSION }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.versions.outputs.HOMEASSISTANT_VERSION }}-${{ steps.versions.outputs.PYTHON_VERSION }}
           cache-from: type=gha
