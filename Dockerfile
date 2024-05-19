@@ -4,6 +4,7 @@ FROM docker.io/library/python:3.12.3-slim-bookworm@sha256:afc139a0a640942491ec48
 ARG HOMEASSISTANT_VERSION=2024.5.4
 # renovate: datasource=pypi depName=imouapi
 ARG IMOUAPI_VERSION=1.0.15
+
 ARG VENV=/srv/homeassistant
 
 RUN set -e \
