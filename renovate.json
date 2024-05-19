@@ -7,7 +7,10 @@
   "packageRules": [
     {
       "matchFileNames": ["Dockerfile"],
-      "groupName": "homeassistant",
+      "groupName": "homeassistant"
+    },
+    {
+      "matchDatasources": ["docker"],
       "pinDigests": true
     },
     {
