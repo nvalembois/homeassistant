@@ -2,7 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    "customManagers:dockerfileVersions"
+    "customManagers:dockerfileVersions",
+    ":automergeMinor"
   ],
   "packageRules": [
     {
@@ -16,11 +17,6 @@
     {
       "matchDatasources": ["github-runners"],
       "groupName": "githubCi"
-    },
-    {
-      "description": "Automerge non-major updates",
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
     }    
   ]
 }
