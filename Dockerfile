@@ -1,4 +1,4 @@
-FROM docker.io/library/python:3.12.4-slim-bookworm@sha256:44fa7d815050f3dc43b1d5d50c3f4d19870a83c96301c9653e8cf908ccd7892b
+FROM docker.io/library/python:3.12.4-slim-bookworm@sha256:00bf210446cdac741f9acd9b7ad43d9deb42a85ed4dfc810803b531bfeeb3269
 
 # renovate: datasource=github-releases depName=home-assistant/core
 ARG HOMEASSISTANT_VERSION=2024.6.4
