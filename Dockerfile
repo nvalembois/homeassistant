@@ -24,7 +24,7 @@ RUN set -e \
  && uv pip install --compile --no-cache \
       -r https://raw.githubusercontent.com/home-assistant/core/${HOMEASSISTANT_VERSION}/requirements_all.txt \
  && uv pip install --compile --no-cache \
-      psycopg2 \
+      psycopg2-binary \
  && uv pip install --compile --no-cache \
       homeassistant==${HOMEASSISTANT_VERSION} imouapi==${IMOUAPI_VERSION} \
  && pip3 uninstall --yes uv wheel setuptools \
