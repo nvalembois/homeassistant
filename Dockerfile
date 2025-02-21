@@ -1,7 +1,7 @@
 FROM docker.io/library/python:3.13.2-slim-bookworm@sha256:ae9f9ac89467077ed1efefb6d9042132d28134ba201b2820227d46c9effd3174
 
 # renovate: datasource=github-releases depName=home-assistant/core
-ARG HOMEASSISTANT_VERSION=2024.12.5
+ARG HOMEASSISTANT_VERSION=2025.2.5
 # renovate: datasource=pypi depName=imouapi
 ARG IMOUAPI_VERSION=1.0.15
 
