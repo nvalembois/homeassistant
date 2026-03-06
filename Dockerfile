@@ -1,24 +1,27 @@
-FROM docker.io/library/python:3.14.3-slim@sha256:6a27522252aef8432841f224d9baaa6e9fce07b07584154fa0b9a96603af7456
+FROM docker.io/library/python:3.14.3-slim@sha256:6a27522252aef8432841f224d9baaa6e9fce07b07584154fa0b9a96603af7456 AS base
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install --yes \
+        bluez libffi8 libssl3t64 zlib1g libopenjp2-7 libtiff6 libturbojpeg0 \
+        tzdata ffmpeg liblapack3 libatlas3-base && \
+    DEBIAN_FRONTEND=noninteractive apt-get clean --yes
+
+FROM base AS build
 
 # renovate: datasource=github-releases depName=home-assistant/core
 ARG HOMEASSISTANT_VERSION=2026.3.0
 # renovate: datasource=pypi depName=imouapi
 ARG IMOUAPI_VERSION=1.0.15
 
-ARG VENV=/srv/homeassistant
+ARG VIRTUAL_ENV=/srv/homeassistant
 
-RUN set -e \
- && DEBIAN_FRONTEND=noninteractive apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
-        bluez libffi8 libssl3 zlib1g libopenjp2-7 libtiff6 libturbojpeg0 \
-        tzdata ffmpeg liblapack3 libatlas3-base \
- && DEBIAN_FRONTEND=noninteractive apt-get install --yes --mark-auto \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --yes \
         libffi-dev libssl-dev libjpeg-dev zlib1g-dev autoconf build-essential \
-        libturbojpeg0-dev liblapack-dev libatlas-base-dev python3-dev \
- && mkdir "${VENV}" \
- && python3 -m venv "${VENV}" \
- && . "${VENV}/bin/activate" \
+        libturbojpeg0-dev liblapack-dev python3-dev \
  && pip3 install --no-build --no-cache uv==0.1.43 wheel setuptools \
+ && mkdir "${VIRTUAL_ENV}" \
+ && python3 -m venv "${VIRTUAL_ENV}" \
+ && . "${VIRTUAL_ENV}/bin/activate" \
  && uv pip install --compile --no-cache \
       -r https://raw.githubusercontent.com/home-assistant/core/${HOMEASSISTANT_VERSION}/requirements.txt \
  && uv pip install --compile --no-cache \
@@ -27,9 +30,14 @@ RUN set -e \
       psycopg2-binary \
  && uv pip install --compile --no-cache \
       homeassistant==${HOMEASSISTANT_VERSION} imouapi==${IMOUAPI_VERSION} \
- && pip3 uninstall --yes uv wheel setuptools \
- && DEBIAN_FRONTEND=noninteractive apt-get autoremove --purge --yes \
  && DEBIAN_FRONTEND=noninteractive apt-get clean --yes
+
+FROM base
+
+ENV VIRTUAL_ENV=/srv/homeassistant
+ENV PATH=${VIRTUAL_ENV}/bin:${PATH}
+
+COPY --from=build $VIRTUAL_ENV $VIRTUAL_ENV
 
 RUN set -e \
  && adduser -u 10000 --no-create-home --disabled-password --home /config --comment 'Homeassistant user' homeassistant \
@@ -37,8 +45,6 @@ RUN set -e \
 
 USER homeassistant
 
-ENV VIRTUAL_ENV=${VENV}
-ENV PATH=${VENV}/bin:${PATH}
  
 WORKDIR /config
 
