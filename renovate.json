@@ -13,7 +13,7 @@
       "groupName": "homeassistant"
     },
     {
-      "matchDatasources": ["github-runners"],
+      "matchDatasources": ["github-tags"],
       "groupName": "githubCi"
     }    
   ]
