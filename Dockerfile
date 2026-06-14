@@ -26,8 +26,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install --yes \
       -r https://raw.githubusercontent.com/home-assistant/core/${HOMEASSISTANT_VERSION}/requirements.txt \
  && uv pip install --compile --no-cache \
       -r https://raw.githubusercontent.com/home-assistant/core/${HOMEASSISTANT_VERSION}/requirements_all.txt \
- && uv pip install --compile --no-cache \
-      psycopg2-binary \
+ && uv pip install --compile --no-cache --upgrade \
+      psycopg2-binary pymicro-vad \
  && uv pip install --compile --no-cache \
       homeassistant==${HOMEASSISTANT_VERSION} imouapi==${IMOUAPI_VERSION} \
  && DEBIAN_FRONTEND=noninteractive apt-get clean --yes
