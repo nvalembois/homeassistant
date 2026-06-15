@@ -1,4 +1,6 @@
 ARG VIRTUAL_ENV=/srv/homeassistant
+ARG USER_NAME=homeassistant
+ARG USER_ID=1000
 
 FROM docker.io/library/python:3.14.6 AS build
 
@@ -37,18 +39,29 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
           tzdata ffmpeg liblapack3 libatlas3-base && \
     DEBIAN_FRONTEND=noninteractive apt-get clean --yes
 
-ARG VIRTUAL_ENV
-
-ENV PATH=${VIRTUAL_ENV}/bin:${PATH}
-
-COPY --from=build $VIRTUAL_ENV $VIRTUAL_ENV
+    
+ARG USER_NAME
+ARG USER_ID
 
 RUN set -e \
- && adduser -u 10000 --no-create-home --disabled-password --home /config --comment 'Homeassistant user' homeassistant \
- && install -d -o homeassistant -g root -m 0750 /config
+ && install -d \
+     -o "${USER_ID}" \
+     -g root \
+     -m 0750 \
+     /config \
+ && adduser -u "${USER_ID}" \
+     --no-create-home \
+     --disabled-password \
+     --home /config \
+     --comment 'Homeassistant user' \
+     "${USER_NAME}"
+    
+ARG VIRTUAL_ENV
+ENV PATH=${VIRTUAL_ENV}/bin:${PATH}
+COPY --from=build $VIRTUAL_ENV $VIRTUAL_ENV
 
-USER homeassistant
- 
+USER $USER_NAME
+
 WORKDIR /config
 
 ENTRYPOINT [ "" ]
