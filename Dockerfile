@@ -2,14 +2,14 @@ ARG VIRTUAL_ENV=/srv/homeassistant
 ARG USER_NAME=homeassistant
 ARG USER_ID=1000
 
-FROM docker.io/library/python:3.14.6 AS build
+FROM docker.io/library/python:3.14.6@sha256:09b29c360b84742bf98eba40b214f7f6b4b53286bb2c8a8b5b1afa188a8d9c0e AS build
 
 # renovate: datasource=github-releases depName=home-assistant/core
-ARG HOMEASSISTANT_VERSION=2026.6.3
+ARG HOMEASSISTANT_VERSION=2026.7.1
 # renovate: datasource=pypi depName=imouapi
 ARG IMOUAPI_VERSION=1.0.15
 # renovate: datasource=pypi depName=uv
-ARG UV_VERSION=0.11.21
+ARG UV_VERSION=0.11.26
 
 ARG VIRTUAL_ENV
 
@@ -48,7 +48,7 @@ RUN jq -r '.[]|[.name,.repo,.ref]|join("#")' hacs_repositories.json \
      | uv pip install --compile --no-cache -r - \
    ; done
 
-FROM docker.io/library/python:3.14.6-slim
+FROM docker.io/library/python:3.14.6-slim@sha256:b877e50bd90de10af8d82c57a022fc2e0dc731c5320d762a27986facfc3355c1
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install --yes \
