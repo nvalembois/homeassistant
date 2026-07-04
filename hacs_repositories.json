@@ -1,0 +1,12 @@
+[
+    {
+        "name": "hoymiles_cloud",
+        "repo": "Philra94/homeassistant-hoymiles-cloud",
+        "ref": "heads/main"
+    },
+    {
+        "name": "hoymiles_wifi",
+        "repo": "suaveolent/ha-hoymiles-wifi",
+        "ref": "tags/v0.5.1"
+    }
+]
