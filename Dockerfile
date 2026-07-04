@@ -13,23 +13,40 @@ ARG UV_VERSION=0.11.21
 
 ARG VIRTUAL_ENV
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update \
- && DEBIAN_FRONTEND=noninteractive apt-get install --yes \
-           libffi-dev libssl-dev libjpeg-dev zlib1g-dev \
-           libturbojpeg0-dev liblapack-dev \
- && pip3 install --no-build --no-cache "uv==${UV_VERSION}" wheel setuptools \
+# Use Bash
+# Install build packages
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+ && apt-get install --yes \
+       libffi-dev libssl-dev libjpeg-dev zlib1g-dev \
+       libturbojpeg0-dev liblapack-dev \
+       jq \
+ && apt-get clean --yes
+
+# Create homeassistant virtualenv
+RUN pip3 install --no-build --no-cache "uv==${UV_VERSION}" wheel setuptools \
  && mkdir "${VIRTUAL_ENV}" \
  && python3 -m venv "${VIRTUAL_ENV}" \
- && . "${VIRTUAL_ENV}/bin/activate" \
+ && . "${VIRTUAL_ENV}/bin/activate"
+
+# Install homeassistant
+RUN uv pip install --compile --no-cache \
+       -r https://raw.githubusercontent.com/home-assistant/core/${HOMEASSISTANT_VERSION}/requirements.txt \
  && uv pip install --compile --no-cache \
-           -r https://raw.githubusercontent.com/home-assistant/core/${HOMEASSISTANT_VERSION}/requirements.txt \
+       -r https://raw.githubusercontent.com/home-assistant/core/${HOMEASSISTANT_VERSION}/requirements_all.txt \
  && uv pip install --compile --no-cache \
-           -r https://raw.githubusercontent.com/home-assistant/core/${HOMEASSISTANT_VERSION}/requirements_all.txt \
- && uv pip install --compile --no-cache \
-           psycopg2-binary \
- && uv pip install --compile --no-cache \
-           homeassistant==${HOMEASSISTANT_VERSION} imouapi==${IMOUAPI_VERSION} \
- && DEBIAN_FRONTEND=noninteractive apt-get clean --yes
+       psycopg2-binary \
+       homeassistant==${HOMEASSISTANT_VERSION} \
+       imouapi==${IMOUAPI_VERSION}
+
+# Install HACS required python packages
+COPY --chown=root:root --chmod=0644 hacs_repositories.json .
+RUN jq -r '.[]|[.name,.repo,.ref]|join("#")' hacs_repositories.json \
+ | while IFS='#' read name repo ref ; do \
+     curl -s "https://raw.githubusercontent.com/${repo}/refs/${ref}/custom_components/${name}/manifest.json" \
+     | jq -r '.requirements.[]' \
+     | uv pip install --compile --no-cache -r - \
+   ; done
 
 FROM docker.io/library/python:3.14.6-slim
 
