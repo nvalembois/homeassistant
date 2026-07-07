@@ -9,7 +9,7 @@ ARG HOMEASSISTANT_VERSION=2026.7.1
 # renovate: datasource=pypi depName=imouapi
 ARG IMOUAPI_VERSION=1.0.15
 # renovate: datasource=pypi depName=uv
-ARG UV_VERSION=0.11.26
+ARG UV_VERSION=0.11.27
 
 ARG VIRTUAL_ENV
 
