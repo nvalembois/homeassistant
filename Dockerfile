@@ -2,7 +2,7 @@ ARG VIRTUAL_ENV=/srv/homeassistant
 ARG USER_NAME=homeassistant
 ARG USER_ID=1000
 
-FROM docker.io/library/python:3.14.6@sha256:09b29c360b84742bf98eba40b214f7f6b4b53286bb2c8a8b5b1afa188a8d9c0e AS build
+FROM docker.io/library/python:3.14.6@sha256:d158a97d809b7678f4383cabbaf4d8f0974579ebad98f30ca6aa1bf3d850cab8 AS build
 
 # renovate: datasource=github-releases depName=home-assistant/core
 ARG HOMEASSISTANT_VERSION=2026.7.2
@@ -52,7 +52,7 @@ RUN url="${GHRC}"'/\(.repo)/refs/\(.ref)/custom_components/\(.name)/manifest.jso
       uv pip install --compile --no-cache -r - ; \
   done
 
-FROM docker.io/library/python:3.14.6-slim@sha256:b877e50bd90de10af8d82c57a022fc2e0dc731c5320d762a27986facfc3355c1
+FROM docker.io/library/python:3.14.6-slim@sha256:d3400aa122fa42cf0af0dbe8ec3091b047eac5c8f7e3539f7135e86d855dc015
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install --yes \
