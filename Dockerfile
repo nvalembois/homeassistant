@@ -2,14 +2,14 @@ ARG VIRTUAL_ENV=/srv/homeassistant
 ARG USER_NAME=homeassistant
 ARG USER_ID=1000
 
-FROM docker.io/library/python:3.14.6@sha256:51570a50616289f78f340811c34ca4384985f9e891819cbe7620f738d6ca8525 AS build
+FROM docker.io/library/python:3.14.7@sha256:b5998102f95c4b44edf1e7cb5cecbe1f49e0bf054f345c1db5b854e166e6e17a AS build
 
 # renovate: datasource=github-releases depName=home-assistant/core
-ARG HOMEASSISTANT_VERSION=2026.7.4
+ARG HOMEASSISTANT_VERSION=2026.8.0
 # renovate: datasource=pypi depName=imouapi
 ARG IMOUAPI_VERSION=1.0.15
 # renovate: datasource=pypi depName=uv
-ARG UV_VERSION=0.12.1
+ARG UV_VERSION=0.12.2
 
 ARG VIRTUAL_ENV
 
@@ -52,7 +52,7 @@ RUN url="${GHRC}"'/\(.repo)/refs/\(.ref)/custom_components/\(.name)/manifest.jso
       uv pip install --compile --no-cache -r - ; \
   done
 
-FROM docker.io/library/python:3.14.6-slim@sha256:7bec7ddcddeff7975d6ba9b4be7dd6f6b2f55e7491539145e2978f7f97ce9144
+FROM docker.io/library/python:3.14.7-slim@sha256:83c1cebb322d099ac9e3a3a532ba74b0146d702838b25e4c75c02fa81ffeb910
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install --yes \
