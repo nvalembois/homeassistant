@@ -9,7 +9,7 @@ ARG HOMEASSISTANT_VERSION=2026.8.3
 # renovate: datasource=pypi depName=imouapi
 ARG IMOUAPI_VERSION=1.0.15
 # renovate: datasource=pypi depName=uv
-ARG UV_VERSION=0.12.6
+ARG UV_VERSION=0.12.7
 
 ARG VIRTUAL_ENV
 
@@ -52,7 +52,7 @@ RUN url="${GHRC}"'/\(.repo)/refs/\(.ref)/custom_components/\(.name)/manifest.jso
       uv pip install --compile --no-cache -r - ; \
   done
 
-FROM docker.io/library/python:3.14.7-slim@sha256:83ff1d245a3d57d04152252d3ef9cb361494d0b3395abd65a5ebe91c401c8e83
+FROM docker.io/library/python:3.14.7-slim@sha256:cae66f2ef0ec51a9891263eeee7f987dacf0a9879e8aa9353d5606e0530619a5
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install --yes \
