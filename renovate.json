@@ -16,6 +16,15 @@
     {
       "matchDatasources": ["github-tags"],
       "groupName": "githubCi"
-    }    
+    },
+    {
+      "description": "Rester sur Python < 3.15 (guppy3 incompatible)",
+      "matchPackageNames": [
+        "python",
+        "docker.io/library/python",
+        "actions/python-versions"
+      ],
+      "allowedVersions": "<3.15"
+    }
   ]
 }
