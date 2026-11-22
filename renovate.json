@@ -7,7 +7,9 @@
     ":automergeDigest",
     ":automergeMinor"
   ],
-  "dependencyDashboard": true,
+  "dependencyDashboard": {
+    "enabled": true
+  },
   "packageRules": [
     {
       "matchFileNames": ["Dockerfile"],
