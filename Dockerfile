@@ -5,7 +5,7 @@ ARG USER_ID=1000
 FROM docker.io/library/python:3.14.10@sha256:e5de6bc932256f8138c2353023dc4fd24d010d72f6b5cb06be126f0a4cd53784 AS build
 
 # renovate: datasource=github-releases depName=home-assistant/core
-ARG HOMEASSISTANT_VERSION=2026.11.2
+ARG HOMEASSISTANT_VERSION=2026.11.3
 # renovate: datasource=pypi depName=imouapi
 ARG IMOUAPI_VERSION=1.0.15
 # renovate: datasource=pypi depName=uv
